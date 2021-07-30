@@ -1,115 +1,116 @@
-jogo_velha = [[0,0,0],
-                [0,0,0],
-                    [0,0,0]]
-jogo = jogo_velha
+from random import randint
+from time import sleep
 
-print("By: Rogy Rulles")
-
-def V_H():
-    #Linhas
-    if jogo[0][0] == jogo[0][1] == jogo[0][2] == 0:
-        return 0
-    elif jogo[0][0] == jogo[0][1] == jogo[0][2]:
-        print("\nDeu velha na linha UM!!!")
-        return 1
+while True:
+    print("by: Rogy Rulles")
+    nm = int(input("Você quer um mar com quanto de matriz: "))
+    mt = 0
+    mar = list()
 
 
-    if jogo[1][0] == jogo[1][1] == jogo[1][2] == 0:
-        return 0
-    elif jogo[1][0] == jogo[1][1] == jogo[1][2]:
-        print("\nDeu velha na linha DOIS!!!")
-        return 1
+    #Def print
+    def printmat(ma):
+        print("   ", end=' ')
+        total = 0
+        for d in range(0, nm):
+            print(f" {total}", end=' ')
+            total += 1
+        print()
+        for a in range(0, nm):
+            print(f"{ma[a]}")
+        print("\n\n")
+
+    #Def MAR REAL
+    def gereal():
+        matriz = list()
+        for a in range(0, nm):
+            barcos = randint(0, 1)
+            matriz.append(barcos)
+        return matriz
+
+    while (mt < nm):
+        mar.append([mt, gereal()])
+        mt += 1
 
 
-    if jogo[2][0] == jogo[2][1] == jogo[2][2] == 0:
-        return 0
-    elif jogo[2][0] == jogo[2][1] == jogo[2][2]:
-        print("\nDeu velha na linha TRÊS!!!")
-        return 1
+
+    #MAR FALSO
+    marfalso = list()
+    nm1 = nm
+    mt = 0
+    #Def gerador do mar falso
+    def gerfalso():
+        matriz = list()
+        for a in range(0, nm1):
+            barcos = 8
+            matriz.append(barcos)
+        return matriz
+    while (mt < nm1):
+        marfalso.append([mt, gerfalso()])
+        mt += 1
+
+    #print Matriz do mar falso
+    printmat(marfalso)
 
 
-    #Colunas
-    if jogo[0][0] == jogo[1][0] == jogo[2][0] == 0:
-        return 0
-    elif jogo[0][0] == jogo[1][0] == jogo[2][0]:
-        print("\nDeu velha na coluna UM!!!")
-        return 1
 
-    if jogo[0][1] == jogo[1][1] == jogo[2][1] == 0:
-        return 0
-    elif jogo[0][1] == jogo[1][1] == jogo[2][1]:
-        print("\nDeu velha na coluna DOIS!!!")
-        return 1
+    print(f"\nA matriz do mar tem {len(mar)*nm} posições!!!")
+    count = 0
 
-    if jogo[0][1] == jogo[1][1] == jogo[2][1] == 0:
-        return 0
-    elif jogo[0][1] == jogo[1][1] == jogo[2][1]:
-        print("\nDeu velha na coluna TRÊS!!!")
-        return 1
+    p2 = 1
+    p3 = 0
 
-    #Diagonal
-    if jogo[0][0] == jogo[1][1] == jogo[2][2] == 0:
-        return 0
-    elif jogo[0][0] == jogo[1][1] == jogo[2][2]:
-        print("\nDeu velha na diagonal na diagonal  \  !!!")
-        return 1
+    for a, b in enumerate(mar):
+        for c in enumerate(b[1]):
+            if c[1] == 1:
+                count += 1
 
-    if jogo[0][2] == jogo[1][1] == jogo[2][0] == 0:
-        return 0
-    if jogo[0][2] == jogo[1][1] == jogo[2][0]:
-        print("\nDeu velha na diagonal na diagonal  /  !!!")
-        return 1
+    bomb = count
+    barcos = count
+    print(f"\n\nTem {count} navios no mar!!! Está pronto para atacalos??? \nVocê tem {bomb} bombas!!!")
+    print(f"Você tem que destruir pelo menos 50% dos {count} barcos para ganhar!!!")
 
 
-verificado = 0
+    while bomb != 0:
+        p1 = int(input("\nDigite a linha da matriz para tentar destruir os navios do inimigo: "))
+        p2 = 1
+        p3 = int(input("Agora digite a coluna da matriz para tentar destruir os navios do inimigo: "))
+
+        if mar[p1][p2][p3] == 1:
+            marfalso[p1][p2][p3] = 1
+            count -= 1
+            bomb -= 1
+            print("\nParabéns você acertou um navio inimigo!!!")
+            print(f"Restam {bomb} bombas!!\n")
+            printmat(marfalso)
+        else:
+            bomb -= 1
+            marfalso[p1][p2][p3] = 4
+            print("\nVocê errou!!!")
+            print("Tente novamente")
+            print(f"Restam {bomb} bombas\n")
+            printmat(marfalso)
 
 
-def inp(ver):
-    while ver != 1:
-        for pa in range(1, 3):
-            if pa == 1:
-                while True:
-                    print(f"\nPlayer 1! Deseja colocar o número em qual posição? Sendo: \n"
-                          "   0 1 2\n"
-                          f"0 [{jogo[0][0]},{jogo[0][1]},{jogo[0][2]}]\n"
-                            f"1 [{jogo[1][0]},{jogo[1][1]},{jogo[1][2]}]\n"
-                            f"2 [{jogo[2][0]},{jogo[2][1]},{jogo[2][2]}]\n")
-                    n1 = int(input("Qual a linha? 0, 1 ou 2: "))
-                    n2 = int(input("Qual a coluna? 0, 1 ou 2: "))
-                    if jogo[n1][n2] != 0:
-                        print(f"Player 1 tente novamente!! A posição {n1} e {n2} já esta ocupada...")
-                    if jogo[n1][n2] == 0:
-                        jogo[n1][n2] = 1
-                        break
-                ver = V_H()
-                if ver == 1:
-                    break
 
-            if pa == 2:
-                while True:
-                    print("\n\nPlayer 2! Deseja colocar o número em qual posição? Sendo: \n"
-                          "   0 1 2\n"
-                          f"0 [{jogo[0][0]},{jogo[0][1]},{jogo[0][2]}]\n"
-                            f"1 [{jogo[1][0]},{jogo[1][1]},{jogo[1][2]}]\n"
-                            f"2 [{jogo[2][0]},{jogo[2][1]},{jogo[2][2]}]\n")
-                    n1 = int(input("Qual a linha? 0, 1 ou 2: "))
-                    n2 = int(input("Qual a coluna? 0, 1 ou 2: "))
-                    if jogo[n1][n2] != 0:
-                        print(f"Player 2 tente novamente!! A posição {n1} e {n2} já esta ocupada...")
-                    if jogo[n1][n2] == 0:
-                        jogo[n1][n2] = 2
-                        break
-                ver = V_H()
-                if ver == 1:
-                    break
+    if count != 0:
+        mult = count * 100
+        porcentagem = mult / barcos
 
+        print(f"\n{porcentagem}")
+        if porcentagem >= 50:
+            print("Você ganhou Parabens!!!")
+            for a in range(0, 5):
+                print(f"Saindo em {a} segundos!!")
+                sleep(1)
+        else:
+            print("Você perdeu tente novamente")
+            for a in range(0, 5):
+                print(f"Saindo em {a} segundos!!")
+                sleep(1)
 
-inp(verificado)
-
-print(""
-                      "   0 1 2\n"
-                      f"0 [{jogo[0][0]},{jogo[0][1]},{jogo[0][2]}]\n"
-                        f"1 [{jogo[1][0]},{jogo[1][1]},{jogo[1][2]}]\n"
-                        f"2 [{jogo[2][0]},{jogo[2][1]},{jogo[2][2]}]\n")
-
-
+    if count == 0:
+        print("Você destruiu todos os navios... Parabens!!!")
+        for a in range(0, 5):
+            print(f"Saindo em {a} segundos!!")
+            sleep(1)
